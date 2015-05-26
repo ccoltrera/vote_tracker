@@ -1,0 +1,92 @@
+@font-face {
+  font-family: RockSalt;
+  src:url("Rock_Salt/RockSalt.ttf");
+}
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+  background: #7D8A2E;
+}
+
+header, footer {
+  background: #C9D787;
+  border: 1px solid #C9D787;
+}
+
+header {
+  padding: 10px;
+}
+
+main {
+  background: #FFFFFF;
+}
+
+h1, h2 {
+  font-family: RockSalt;
+  text-align: center;
+}
+
+h1 {
+  font-size: 4rem;
+  color: #FFFFFF;
+}
+
+article {
+  padding: 10px;
+}
+
+h2 {
+  font-size: 2rem;
+  color: #7D8A2E;
+}
+
+div {
+  text-align: center;
+}
+
+figure {
+  background: #C9D787;
+  padding: 10px;
+  margin: 10px;
+}
+
+figure.chosen_kitty {
+  background: #FF8598;
+}
+
+button {
+
+  background: #FF8598;
+  font-family: RockSalt;
+  border-width: 0;
+  color: #FFFFFF;
+}
+
+button:hover {
+  background: #FFC0A9;
+  color: #FFFFFF;
+}
+
+button:active {
+  background: #FFC0A9;
+  color: #FFFFFF;
+}
+
+.user_opinion {
+  font-family: RockSalt;
+  color: #7D8A2E;
+}
+
+aside {
+  text-align: center;
+}
+
+#more_kittens {
+  margin: 10px 0 10px 0;
+}
