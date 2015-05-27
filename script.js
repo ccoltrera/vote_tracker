@@ -1,61 +1,64 @@
 $((function () {
   var tracker;
 
-  //Photo() object constructor
-  function Photo(link) {
+  //Kitten() object constructor
+  function Kitten(link) {
     this.link = link;
     this.score = 0;
   }
 
   function Tracker() {
-    this.photos = [];
+    this.kittens = [];
   };
 
-  Tracker.prototype.addPhoto = function(photo) {
-    this.photos.push(photo);
+  Tracker.prototype.addKitten = function(kitten) {
+    this.kittens.push(kitten);
   }
 
-  Tracker.prototype.getRandomPhoto = function() {
-    return this.photos[Math.floor(Math.random() * this.photos.length)];
+  Tracker.prototype.getRandomKitten = function() {
+    return this.kittens[Math.floor(Math.random() * this.kittens.length)];
   }
 
-  Tracker.prototype.setPhotos = function(oldKittenOne, oldKittenTwo) {
+  Tracker.prototype.setKittens = function(oldKittenOne, oldKittenTwo) {
     var $moreKittens, $kittenOne, $kittenTwo, $kittenOneButton, $kittenTwoButton, $kittenOneFigure, $kittenTwoFigure, $kittenOneImg, $kittenTwoImg, $userOpinions, kittenOne, kittenTwo, showOpinions, voteKittenOne, voteKittenTwo;
 
     //Queries and caches everything used more than once below.
-
     $kittenOne = $('#kitten_1');
     $kittenTwo = $('#kitten_2');
 
+    //Additionally changes visibility and removes event handlers, where necessary.
     $userOpinions = $('.user_opinion').hide();
-    $moreKittens = $('#more_kittens').hide();
+    $moreKittens = $('#more_kittens').css('visibility','hidden');
 
     $kittenOneButton = $kittenOne.find('button').show().off();
     $kittenTwoButton = $kittenTwo.find('button').show().off();
 
-    $kittenOneFigure = $kittenOne.find('figure');
-    $kittenTwoFigure = $kittenTwo.find('figure');
+    $kittenOneFigure = $kittenOne.find('figure').off();
+    $kittenTwoFigure = $kittenTwo.find('figure').off();
 
     $kittenOneImg = $kittenOne.find('img');
     $kittenTwoImg = $kittenTwo.find('img');
 
+
+    //Resets classes on figures.
     $('figure').removeClass('chosen_kitty');
     $('figure').removeClass('unchosen_kitty');
 
-    //Sets event handler for moreKittens button
+    //Sets event handler for moreKittens button.
     $moreKittens.on('click', $.proxy(function() {
-      this.setPhotos(kittenOne, kittenTwo);
+      this.setKittens(kittenOne, kittenTwo);
     }, this));
 
 
     //Gets two different random kittens, makes sure they are new, stores them in variables.
     do {
-      kittenOne = this.getRandomPhoto();
+      kittenOne = this.getRandomKitten();
     } while (kittenOne === oldKittenOne || kittenOne === oldKittenTwo)
     do {
-      kittenTwo = this.getRandomPhoto();
+      kittenTwo = this.getRandomKitten();
     } while (kittenTwo === oldKittenOne || kittenTwo === oldKittenTwo || kittenOne === kittenTwo);
 
+    //Hides vote buttons, and displays kitten votes.
     showOpinions = function() {
       $kittenOneButton.hide();
       $kittenTwoButton.hide();
@@ -65,32 +68,37 @@ $((function () {
       $kittenTwo.find('span').text('Votes for this kitty: ' + kittenTwo.score);
     }
 
+    //Adds vote for kittenOne, highlights photo, shows votes, and shows moreKittens button.
     voteKittenOne = function() {
       console.log(kittenOne);
       kittenOne.score ++;
       $kittenOneFigure.addClass('chosen_kitty');
       $kittenTwoFigure.addClass('unchosen_kitty');
       showOpinions();
-      $moreKittens.show();
-      $kittenOneImg.off();
-      $kittenTwoImg.off();
+      $moreKittens.css('visibility','visible');
+      $kittenOneFigure.off();
+      $kittenTwoFigure.off();
     }
 
+    //Adds vote for kittenTwo, highlights photo, shows votes, and shows moreKittens button.
     voteKittenTwo = function() {
       console.log(kittenTwo);
       kittenTwo.score ++;
       $kittenTwoFigure.addClass('chosen_kitty');
       $kittenOneFigure.addClass('unchosen_kitty');
       showOpinions();
-      $moreKittens.show()
-      $kittenOneImg.off();
-      $kittenTwoImg.off();
+      $moreKittens.css('visibility','visible');
+      $kittenOneFigure.off();
+      $kittenTwoFigure.off();
     }
 
-    //Puts links to the photos in the proper places.
-    $kittenOneImg.attr('src', kittenOne.link).on('click', voteKittenOne);
-    $kittenTwoImg.attr('src', kittenTwo.link).on('click', voteKittenTwo);
+    //Puts links to the images in the proper places.
+    $kittenOneImg.attr('src', kittenOne.link);
+    $kittenTwoImg.attr('src', kittenTwo.link);
 
+    //Set event handling on buttons and figures.
+    $kittenOneFigure.on('click', voteKittenOne);
+    $kittenTwoFigure.on('click', voteKittenTwo);
 
     $kittenOneButton.on('click', voteKittenOne);
     $kittenTwoButton.on('click', voteKittenTwo);
@@ -99,12 +107,10 @@ $((function () {
 
   tracker = new Tracker();
 
-  //Loop to add all the Photo() objects holding the kittens to tracker.
-  for (var i = 1; i <= 14; i++) {
-    tracker.addPhoto(new Photo('kittens/'+ i + '.jpg'));
-  }
+  //Loop to add all the Kitten() objects holding the images to tracker.
+  for (var i = 1; i <= 14; i++) { tracker.addKitten(new Kitten('kittens/'+ i + '.jpg')); }
 
-  tracker.setPhotos();
+  tracker.setKittens();
 
 })());
 
