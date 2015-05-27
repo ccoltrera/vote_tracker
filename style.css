@@ -3,24 +3,23 @@
   src:url("Rock_Salt/RockSalt.ttf");
 }
 
-html {
+* {
   box-sizing: border-box;
 }
-*, *:before, *:after {
-  box-sizing: inherit;
+
+@media (max-width: 550px) {
+  .offset-by-one.columns {
+    margin-left: 0;
+  }
 }
 
 body {
   background: #7D8A2E;
 }
 
-header, footer {
+header, main, footer {
   background: #C9D787;
-  border: 1px solid #C9D787;
-}
-
-header {
-  padding: 10px;
+  border: 0.1rem solid #C9D787;
 }
 
 main {
@@ -38,7 +37,7 @@ h1 {
 }
 
 article {
-  padding: 10px;
+  padding: 3rem;
 }
 
 h2 {
@@ -52,8 +51,8 @@ div {
 
 figure {
   background: #C9D787;
-  padding: 10px;
-  margin: 10px;
+  margin: 1rem;
+  padding: 1rem;
 }
 
 figure.chosen_kitty {
