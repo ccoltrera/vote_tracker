@@ -3,16 +3,6 @@
   src:url("Rock_Salt/RockSalt.ttf");
 }
 
-* {
-  box-sizing: border-box;
-}
-
-@media (max-width: 550px) {
-  .offset-by-one.columns {
-    margin-left: 0;
-  }
-}
-
 body {
   background: #7D8A2E;
 }
@@ -20,6 +10,10 @@ body {
 header, main, footer {
   background: #C9D787;
   border: 0.1rem solid #C9D787;
+}
+
+header {
+  height: auto;
 }
 
 main {
@@ -34,14 +28,15 @@ h1, h2 {
 h1 {
   font-size: 4rem;
   color: #FFFFFF;
+  margin: 1rem;
 }
 
 article {
-  padding: 3rem;
+  padding: 3rem 0 0 0;
 }
 
 h2 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: #7D8A2E;
 }
 
@@ -51,48 +46,77 @@ div {
 
 figure {
   background: #C9D787;
-  margin: 1rem;
+  margin: 1rem 1rem 3rem 1rem;
   padding: 1rem;
+  border-radius: 3rem;
+  box-shadow: 0 0.5rem 0 #7D8A2E;
+  transition: all .1s linear;
 }
 
 figure.chosen_kitty {
   background: #FF8598;
+  box-shadow: 0 0.5rem 0 #FFC0A9;
+  transform: translateY(0rem);
 }
 
 figure:hover {
-  background: #FFC0A9;
   cursor: pointer;
+  box-shadow: 0 0.4rem 0 #7D8A2E;
+  transform: translateY(0.1rem);
+}
+
+figure:active {
+  box-shadow: 0 0.2rem 0 #7D8A2E;
+  transform: translateY(0.3rem);
 }
 
 figure.chosen_kitty:hover {
   background: #FF8598;
+  box-shadow: 0 0.4rem 0 #FFC0A9;
+  transform: translateY(0.1rem);
   cursor: default;
 }
 
 figure.unchosen_kitty:hover {
   background: #C9D787;
+  box-shadow: 0 0.4rem 0 #7D8A2E;
+  transform: translateY(0.1rem);
   cursor: default;
 }
 
-button {
+img {
+  border-radius: 3rem;
+}
 
+button {
   background: #FF8598;
   font-family: RockSalt;
   border-width: 0;
   color: #FFFFFF;
+  box-shadow: 0 0.4rem 0 #FFC0A9;
+  transition: all .1s linear;
 }
 
 button:hover {
-  background: #FFC0A9;
   color: #FFFFFF;
+  box-shadow: 0 0.3rem 0 #FFC0A9;
+  transform: translateY(0.1rem);
 }
 
 button:active {
-  background: #FFC0A9;
+  color: #FFFFFF;
+  box-shadow: 0 0.1rem 0 #FFC0A9;
+  transform: translateY(0.3rem);
+}
+
+button:focus {
   color: #FFFFFF;
 }
 
 .user_opinion {
+  display: block;
+  height: 38px;
+  margin: 0 0 1rem 0;
   font-family: RockSalt;
   color: #7D8A2E;
 }
@@ -102,5 +126,5 @@ aside {
 }
 
 #more_kittens {
-  margin: 10px 0 10px 0;
+  margin: 1rem 0 3rem 0;
 }
