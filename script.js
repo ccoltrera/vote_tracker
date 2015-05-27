@@ -70,7 +70,6 @@ $((function () {
 
     //Adds vote for kittenOne, highlights photo, shows votes, and shows moreKittens button.
     voteKittenOne = function() {
-      console.log(kittenOne);
       kittenOne.score ++;
       $kittenOneFigure.addClass('chosen_kitty');
       $kittenTwoFigure.addClass('unchosen_kitty');
@@ -82,7 +81,6 @@ $((function () {
 
     //Adds vote for kittenTwo, highlights photo, shows votes, and shows moreKittens button.
     voteKittenTwo = function() {
-      console.log(kittenTwo);
       kittenTwo.score ++;
       $kittenTwoFigure.addClass('chosen_kitty');
       $kittenOneFigure.addClass('unchosen_kitty');
@@ -107,10 +105,31 @@ $((function () {
 
   tracker = new Tracker();
 
-  //Loop to add all the Kitten() objects holding the images to tracker.
-  for (var i = 1; i <= 14; i++) { tracker.addKitten(new Kitten('kittens/'+ i + '.jpg')); }
+  var imgurSettings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "https://api.imgur.com/3/album/IlrZO/images",
+    "method": "GET",
+    "headers": {
+      "authorization": "Client-ID 94a39a9de3f3274"
+    }
+  }
 
-  tracker.setKittens();
+  $.ajax(imgurSettings)
+    .done(function (response) {
+      var imageJSON = response;
+      if (imageJSON["data"].length > 0) {
+        for (var i = 0; i < imageJSON["data"].length; i++) {
+          tracker.addKitten(new Kitten(imageJSON["data"][i]["link"]));
+        }
+        tracker.setKittens();
+      }
+      console.dir(tracker);
+    }).fail(function (error) {
+      console.log(error);
+    });
+
+
 
 })());
 
