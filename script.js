@@ -19,7 +19,7 @@ $((function () {
     return this.photos[Math.floor(Math.random() * this.photos.length)];
   }
 
-  Tracker.prototype.setPhotos = function() {
+  Tracker.prototype.setPhotos = function(oldKittenOne, oldKittenTwo) {
     var $moreKittens, $kittenOne, $kittenTwo, $kittenOneButton, $kittenTwoButton, $kittenOneFigure, $kittenTwoFigure, $kittenOneImg, $kittenTwoImg, $userOpinions, kittenOne, kittenTwo, showOpinions, voteKittenOne, voteKittenTwo;
 
     //Queries and caches everything used more than once below.
@@ -44,15 +44,17 @@ $((function () {
 
     //Sets event handler for moreKittens button
     $moreKittens.on('click', $.proxy(function() {
-      this.setPhotos();
+      this.setPhotos(kittenOne, kittenTwo);
     }, this));
 
 
-    //Gets two different random kittens, stores them in variables.
-    kittenOne = this.getRandomPhoto();
+    //Gets two different random kittens, makes sure they are new, stores them in variables.
+    do {
+      kittenOne = this.getRandomPhoto();
+    } while (kittenOne === oldKittenOne || kittenOne === oldKittenTwo)
     do {
       kittenTwo = this.getRandomPhoto();
-    } while (kittenOne === kittenTwo);
+    } while (kittenTwo === oldKittenOne || kittenTwo === oldKittenTwo || kittenOne === kittenTwo);
 
     showOpinions = function() {
       $kittenOneButton.hide();
