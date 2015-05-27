@@ -1,5 +1,5 @@
 $((function () {
-  var tracker;
+  var tracker, imgurSettings;
 
   //Kitten() object constructor
   function Kitten(link) {
@@ -47,6 +47,7 @@ $((function () {
     //Sets event handler for moreKittens button.
     $moreKittens.on('click', $.proxy(function() {
       this.setKittens(kittenOne, kittenTwo);
+      syncDownFirebase();
     }, this));
 
 
@@ -66,28 +67,51 @@ $((function () {
       $userOpinions.show();
       $kittenOne.find('span').text('Votes for this kitty: ' + kittenOne.score);
       $kittenTwo.find('span').text('Votes for this kitty: ' + kittenTwo.score);
+
     }
 
-    //Adds vote for kittenOne, highlights photo, shows votes, and shows moreKittens button.
+    //Adds vote for kittenOne, attempts to sync it to Firebase, highlights photo, shows votes, and shows moreKittens button.
     voteKittenOne = function() {
       kittenOne.score ++;
-      $kittenOneFigure.addClass('chosen_kitty');
-      $kittenTwoFigure.addClass('unchosen_kitty');
-      showOpinions();
-      $moreKittens.css('visibility','visible');
-      $kittenOneFigure.off();
-      $kittenTwoFigure.off();
+      kittenRef.set(JSON.stringify(tracker["kittens"]), function(error) {
+        $kittenOneFigure.addClass('chosen_kitty');
+        $kittenTwoFigure.addClass('unchosen_kitty');
+        showOpinions();
+        $moreKittens.css('visibility','visible');
+        $kittenOneFigure.off();
+        $kittenTwoFigure.off();
+
+      });
+
     }
 
-    //Adds vote for kittenTwo, highlights photo, shows votes, and shows moreKittens button.
+    //Adds vote for kittenTwo, attempts to sync it to Firebase, highlights photo, shows votes, and shows moreKittens button.
     voteKittenTwo = function() {
       kittenTwo.score ++;
-      $kittenTwoFigure.addClass('chosen_kitty');
-      $kittenOneFigure.addClass('unchosen_kitty');
-      showOpinions();
-      $moreKittens.css('visibility','visible');
-      $kittenOneFigure.off();
-      $kittenTwoFigure.off();
+      kittenRef.set(JSON.stringify(tracker["kittens"]), function(error) {
+
+        $kittenTwoFigure.addClass('chosen_kitty');
+        $kittenOneFigure.addClass('unchosen_kitty');
+        showOpinions();
+        $moreKittens.css('visibility','visible');
+        $kittenOneFigure.off();
+        $kittenTwoFigure.off();
+
+      });
+
+    }
+
+
+    syncDownFirebase = function() {
+
+      kittenRef.on("value", function(snapshot) {
+        var kittens = JSON.parse(snapshot.val());
+        tracker.kittens = kittens;
+        tracker.setKittens();
+      }, function (errorObject) {
+        console.log("The read failed: " + errorObject.code);
+      });
+
     }
 
     //Puts links to the images in the proper places.
@@ -105,7 +129,7 @@ $((function () {
 
   tracker = new Tracker();
 
-  var imgurSettings = {
+  imgurSettings = {
     "async": true,
     "crossDomain": true,
     "url": "https://api.imgur.com/3/album/IlrZO/images",
@@ -115,7 +139,7 @@ $((function () {
     }
   }
 
-  $.ajax(imgurSettings)
+  /*$.ajax(imgurSettings)
     .done(function (response) {
       var imageJSON = response;
       if (imageJSON["data"].length > 0) {
@@ -123,12 +147,22 @@ $((function () {
           tracker.addKitten(new Kitten(imageJSON["data"][i]["link"]));
         }
         tracker.setKittens();
+        trackerRef.set(JSON.stringify(tracker["kittens"]));
       }
-      console.dir(tracker);
     }).fail(function (error) {
       console.log(error);
-    });
+    });*/
 
+  var myFirebaseRef = new Firebase("http://boiling-torch-5679.firebaseIO.com");
+  var kittenRef = myFirebaseRef.child("kittenTracker");
+
+  kittenRef.on("value", function(snapshot) {
+    var kittens = JSON.parse(snapshot.val());
+    tracker.kittens = kittens;
+    tracker.setKittens();
+  }, function (errorObject) {
+    console.log("The read failed: " + errorObject.code);
+  });
 
 
 })());
