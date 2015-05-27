@@ -20,7 +20,9 @@ $((function () {
   }
 
   Tracker.prototype.setPhotos = function() {
-    var $moreKittens, $kittenOne, $kittenTwo, $userOpinions, kittenOne, kittenTwo, showOpinions;
+    var $moreKittens, $kittenOne, $kittenTwo, $kittenOneButton, $kittenTwoButton, $kittenOneFigure, $kittenTwoFigure, $kittenOneImg, $kittenTwoImg, $userOpinions, kittenOne, kittenTwo, showOpinions, voteKittenOne, voteKittenTwo;
+
+    //Queries and caches everything used more than once below.
 
     $kittenOne = $('#kitten_1');
     $kittenTwo = $('#kitten_2');
@@ -28,49 +30,68 @@ $((function () {
     $userOpinions = $('.user_opinion').hide();
     $moreKittens = $('#more_kittens').hide();
 
-    $kittenOne.find('button').show().off();
-    $kittenTwo.find('button').show().off();
+    $kittenOneButton = $kittenOne.find('button').show().off();
+    $kittenTwoButton = $kittenTwo.find('button').show().off();
+
+    $kittenOneFigure = $kittenOne.find('figure');
+    $kittenTwoFigure = $kittenTwo.find('figure');
+
+    $kittenOneImg = $kittenOne.find('img');
+    $kittenTwoImg = $kittenTwo.find('img');
 
     $('figure').removeClass('chosen_kitty');
+    $('figure').removeClass('unchosen_kitty');
 
+    //Sets event handler for moreKittens button
     $moreKittens.on('click', $.proxy(function() {
       this.setPhotos();
     }, this));
 
+
+    //Gets two different random kittens, stores them in variables.
     kittenOne = this.getRandomPhoto();
     do {
       kittenTwo = this.getRandomPhoto();
     } while (kittenOne === kittenTwo);
 
-    //Puts links to the photos in the proper places.
-
-    $kittenOne.find('img').attr('src', kittenOne.link);
-    $kittenTwo.find('img').attr('src', kittenTwo.link);
-
     showOpinions = function() {
-      $kittenOne.find('button').hide();
-      $kittenTwo.find('button').hide();
+      $kittenOneButton.hide();
+      $kittenTwoButton.hide();
 
       $userOpinions.show();
       $kittenOne.find('span').text('Votes for this kitty: ' + kittenOne.score);
       $kittenTwo.find('span').text('Votes for this kitty: ' + kittenTwo.score);
     }
 
-    $kittenOne.find('button').on('click', function() {
+    voteKittenOne = function() {
       console.log(kittenOne);
       kittenOne.score ++;
-      $kittenOne.find('figure').addClass('chosen_kitty');
+      $kittenOneFigure.addClass('chosen_kitty');
+      $kittenTwoFigure.addClass('unchosen_kitty');
       showOpinions();
       $moreKittens.show();
-    });
+      $kittenOneImg.off();
+      $kittenTwoImg.off();
+    }
 
-    $kittenTwo.find('button').on('click', function() {
+    voteKittenTwo = function() {
       console.log(kittenTwo);
       kittenTwo.score ++;
-      $kittenTwo.find('figure').addClass('chosen_kitty');
+      $kittenTwoFigure.addClass('chosen_kitty');
+      $kittenOneFigure.addClass('unchosen_kitty');
       showOpinions();
       $moreKittens.show()
-    });
+      $kittenOneImg.off();
+      $kittenTwoImg.off();
+    }
+
+    //Puts links to the photos in the proper places.
+    $kittenOneImg.attr('src', kittenOne.link).on('click', voteKittenOne);
+    $kittenTwoImg.attr('src', kittenTwo.link).on('click', voteKittenTwo);
+
+
+    $kittenOneButton.on('click', voteKittenOne);
+    $kittenTwoButton.on('click', voteKittenTwo);
 
   }
 

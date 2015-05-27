@@ -60,6 +60,21 @@ figure.chosen_kitty {
   background: #FF8598;
 }
 
+figure:hover {
+  background: #FFC0A9;
+  cursor: pointer;
+}
+
+figure.chosen_kitty:hover {
+  background: #FF8598;
+  cursor: default;
+}
+
+figure.unchosen_kitty:hover {
+  background: #C9D787;
+  cursor: default;
+}
+
 button {
 
   background: #FF8598;
