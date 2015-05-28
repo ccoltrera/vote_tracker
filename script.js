@@ -1,4 +1,4 @@
-//$((function () {
+$((function () {
   var tracker, imgurSettings;
 
   //Kitten() object constructor
@@ -46,9 +46,6 @@
     //Sets event handler for moreKittens button.
     $moreKittens.on('click', function() {
         tracker.setKittens(kittenOne, kittenTwo);
-
-        //Set the download of updated kittens here
-
     });
 
 
@@ -129,18 +126,32 @@
   var myFirebaseRef = new Firebase("http://boiling-torch-5679.firebaseIO.com");
   var kittensRef = myFirebaseRef.child("kittenTracker");
 
+  //Function called once at startup, which creates a Tracker() object and populates it with Firebase kittens
   kittensRef.once('value', function(kittensSnapshot) {
-    // store kittensSnapshot for use in below examples.
+    //Creates new tracker object kittensSnapshot for use in below examples.
     tracker = new Tracker();
 
+    //Loops through the children of the kittens snapshop, adding the Kitten() objects to the tracker.
     kittensSnapshot.forEach(function(kittenSnapshot) {
       tracker["kittens"][kittenSnapshot.key()] = kittenSnapshot.val();
     });
 
+    //Initializes the game.
     tracker.setKittens();
 
   });
 
+  //Listens for changes in Kitten() objects on the Firebase server, updates local scores to match.
+  kittensRef.on("child_changed", function(kittenSnapshot) {
+    //console.log(tracker["kittens"][kittenSnapshot.key()]["score"]);
+
+    tracker["kittens"][kittenSnapshot.key()]["score"] = kittenSnapshot.val()["score"];
+
+    //console.log(tracker["kittens"][kittenSnapshot.key()]["score"]);
+  });
+
+  //Puts a request to the Imgur API, gets info about kitten photos, generates Kitten() objects locally,
+  //and pushes them to Firebase.
   $("#firebase_reset").on("click", function() {
 
     tracker = new Tracker();
@@ -163,6 +174,6 @@
   })
 
 
-//})());
+})());
 
 
