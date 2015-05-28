@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/ccoltrera/vote_tracker/issues"
   },
-  "homepage": "https://github.com/ccoltrera/vote_tracker#readme"
+  "homepage": "https://github.com/ccoltrera/vote_tracker#readme",
+  "dependencies": {
+    "express": "^4.12.4"
+  }
 }
