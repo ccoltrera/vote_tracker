@@ -1,0 +1,29 @@
+{
+  "name": "vote_tracker",
+  "version": "0.0.1",
+  "description": "Cutest Kitten Pageant vote tracker",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ccoltrera/vote_tracker.git"
+  },
+  "keywords": [
+    "cute",
+    "kitten",
+    "pageant",
+    "votes"
+  ],
+  "author": "Colin Coltrera",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ccoltrera/vote_tracker/issues"
+  },
+  "homepage": "https://github.com/ccoltrera/vote_tracker#readme",
+  "dependencies": {
+    "express": "^4.12.4"
+  }
+}
