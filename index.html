@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cutest Kitten Pageant</title>
+  <link rel="stylesheet" href="normalize.css">
+  <link rel="stylesheet" href="skeleton.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.2.5/firebase.js"></script>
+  <script src="script.js"></script>
+</head>
+<body>
+  <header class="container">
+    <h1>Cutest Kitten Pageant</h1>
+  </header>
+  <main class="container">
+    <article>
+      <h2>Who's Cuter?</h2>
+      <div id="kitten_1" class="five columns offset-by-one">
+        <figure class="twelve columns">
+          <img class="twelve columns">
+        </figure>
+        <button class="vote_button">Cuter</button>
+        <span class="user_opinion columns"></span>
+      </div>
+      <div id="kitten_2" class="five columns">
+        <figure class="twelve columns">
+          <img class="twelve columns">
+        </figure>
+        <button class="vote_button">Cuter</button>
+        <span class="user_opinion columns"></span>
+      </div>
+    </article>
+    <aside class="twelve columns">
+      <button id="more_kittens">We Need Your Help!</button>
+    </aside>
+  </main>
+  <footer class="container">
+    <a id="firebase_reset" class="four columns offset-by-seven">Reset Database</a>
+  </footer>
+</body>
+</html>

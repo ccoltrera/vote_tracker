@@ -10,7 +10,7 @@ app.use(express.static('scripts'));
 
 app.get("/", function(request, response) {
   response.status(200);
-  response.sendFile("/index.html");
+  response.sendFile("index.html", {root: __dirname + "/html"});
 });
 
 app.get("/secret", function(request, response) {
@@ -20,8 +20,7 @@ app.get("/secret", function(request, response) {
 
 app.get("*", function(request, response) {
   response.status(404);
-  //response.send("404 Error. Woops!")
-  response.sendFile("/404.html");
+  response.sendFile("404.html", {root: __dirname + "/html"});
 });
 
 var server = app.listen(5000, function () {
