@@ -1,22 +1,21 @@
-$((function () {
+//$((function () {
   var tracker, imgurSettings;
 
   //Kitten() object constructor
-  function Kitten(link) {
+  function Kitten(id, link) {
+    this.id = id;
     this.link = link;
     this.score = 0;
   }
 
   function Tracker() {
-    this.kittens = [];
+    this.kittens = {};
   };
 
-  Tracker.prototype.addKitten = function(kitten) {
-    this.kittens.push(kitten);
-  }
-
   Tracker.prototype.getRandomKitten = function() {
-    return this.kittens[Math.floor(Math.random() * this.kittens.length)];
+    //return this.kittens[Math.floor(Math.random() * this.kittens.length)];
+    var keys = Object.keys(this["kittens"])
+    return this["kittens"][keys[ keys.length * Math.random() << 0]];
   }
 
   Tracker.prototype.setKittens = function(oldKittenOne, oldKittenTwo) {
@@ -45,12 +44,12 @@ $((function () {
     $('figure').removeClass('unchosen_kitty');
 
     //Sets event handler for moreKittens button.
-    $moreKittens.on('click', $.proxy(function() {
-      kittenRef.set(JSON.stringify(tracker["kittens"]), function(error) {
-        this.setKittens(kittenOne, kittenTwo);
-        syncDownFirebase();
-      });
-    }, this));
+    $moreKittens.on('click', function() {
+        tracker.setKittens(kittenOne, kittenTwo);
+
+        //Set the download of updated kittens here
+
+    });
 
 
     //Gets two different random kittens, makes sure they are new, stores them in variables.
@@ -60,6 +59,7 @@ $((function () {
     do {
       kittenTwo = this.getRandomKitten();
     } while (kittenTwo === oldKittenOne || kittenTwo === oldKittenTwo || kittenOne === kittenTwo);
+
 
     //Hides vote buttons, and displays kitten votes.
     showOpinions = function() {
@@ -75,7 +75,7 @@ $((function () {
     //Adds vote for kittenOne, attempts to sync it to Firebase, highlights photo, shows votes, and shows moreKittens button.
     voteKittenOne = function() {
       kittenOne.score ++;
-      // kittenRef.set(JSON.stringify(tracker["kittens"]), function(error) {
+      kittensRef.child(kittenOne.id).update(kittenOne, function(error) {
         $kittenOneFigure.addClass('chosen_kitty');
         $kittenTwoFigure.addClass('unchosen_kitty');
         showOpinions();
@@ -83,14 +83,14 @@ $((function () {
         $kittenOneFigure.off();
         $kittenTwoFigure.off();
 
-      // });
+      });
 
     }
 
     //Adds vote for kittenTwo, attempts to sync it to Firebase, highlights photo, shows votes, and shows moreKittens button.
     voteKittenTwo = function() {
       kittenTwo.score ++;
-      // kittenRef.set(JSON.stringify(tracker["kittens"]), function(error) {
+      kittensRef.child(kittenTwo.id).update(kittenTwo, function(error) {
 
         $kittenTwoFigure.addClass('chosen_kitty');
         $kittenOneFigure.addClass('unchosen_kitty');
@@ -99,19 +99,6 @@ $((function () {
         $kittenOneFigure.off();
         $kittenTwoFigure.off();
 
-      // });
-
-    }
-
-
-    syncDownFirebase = function() {
-
-      kittenRef.on("value", function(snapshot) {
-        var kittens = JSON.parse(snapshot.val());
-        tracker.kittens = kittens;
-        tracker.setKittens();
-      }, function (errorObject) {
-        console.log("The read failed: " + errorObject.code);
       });
 
     }
@@ -129,8 +116,6 @@ $((function () {
 
   }
 
-  tracker = new Tracker();
-
   imgurSettings = {
     "async": true,
     "crossDomain": true,
@@ -142,14 +127,18 @@ $((function () {
   }
 
   var myFirebaseRef = new Firebase("http://boiling-torch-5679.firebaseIO.com");
-  var kittenRef = myFirebaseRef.child("kittenTracker");
+  var kittensRef = myFirebaseRef.child("kittenTracker");
 
-  kittenRef.on("value", function(snapshot) {
-    var kittens = JSON.parse(snapshot.val());
-    tracker.kittens = kittens;
+  kittensRef.once('value', function(kittensSnapshot) {
+    // store kittensSnapshot for use in below examples.
+    tracker = new Tracker();
+
+    kittensSnapshot.forEach(function(kittenSnapshot) {
+      tracker["kittens"][kittenSnapshot.key()] = kittenSnapshot.val();
+    });
+
     tracker.setKittens();
-  }, function (errorObject) {
-    console.log("The read failed: " + errorObject.code);
+
   });
 
   $("#firebase_reset").on("click", function() {
@@ -161,17 +150,19 @@ $((function () {
         var imageJSON = response;
         if (imageJSON["data"].length > 0) {
           for (var i = 0; i < imageJSON["data"].length; i++) {
-            tracker.addKitten(new Kitten(imageJSON["data"][i]["link"]));
+            tracker["kittens"][imageJSON["data"][i]["id"]] = new Kitten(imageJSON["data"][i]["id"], imageJSON["data"][i]["link"]);
+            kittensRef.child(imageJSON["data"][i]["id"]).set(tracker["kittens"][imageJSON["data"][i]["id"]]);
           }
-          kittenRef.set(JSON.stringify(tracker["kittens"]));
+          tracker.setKittens();
         }
       }).fail(function (error) {
         console.log(error);
       });
 
+
   })
 
 
-})());
+//})());
 
 
