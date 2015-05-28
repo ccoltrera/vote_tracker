@@ -174,3 +174,12 @@ aside {
 #more_kittens {
   margin: 1rem 0 3rem 0;
 }
+
+a {
+  cursor: pointer;
+  color: #7D8A2E;
+}
+
+a:hover {
+  color: #FFFFFF;
+}
