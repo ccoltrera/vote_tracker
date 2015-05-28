@@ -1,4 +1,4 @@
-$((function () {
+(function() {
   var tracker, imgurSettings, firebaseRef, kittensRef;
 
   //Kitten() object constructor
@@ -10,13 +10,12 @@ $((function () {
 
   function Tracker() {
     this.kittens = {};
-  };
+  }
 
   Tracker.prototype.getRandomKitten = function() {
-    //return this.kittens[Math.floor(Math.random() * this.kittens.length)];
     var keys = Object.keys(this["kittens"])
     return this["kittens"][keys[ keys.length * Math.random() << 0]];
-  }
+  };
 
   Tracker.prototype.setKittens = function(oldKittenOne, oldKittenTwo) {
     var $moreKittens, $kittenOne, $kittenTwo, $kittenOneButton, $kittenTwoButton, $kittenOneFigure, $kittenTwoFigure, $kittenOneImg, $kittenTwoImg, $userOpinions, kittenOne, kittenTwo, showOpinions, voteKittenOne, voteKittenTwo;
@@ -44,9 +43,9 @@ $((function () {
     $('figure').removeClass('unchosen_kitty');
 
     //Sets event handler for moreKittens button.
-    $moreKittens.on('click', function() {
-        tracker.setKittens(kittenOne, kittenTwo);
-    });
+    $moreKittens.on('click', $.proxy(function() {
+        this.setKittens(kittenOne, kittenTwo);
+    }, this));
 
 
     //Gets two different random kittens, makes sure they are new, stores them in variables.
@@ -69,7 +68,8 @@ $((function () {
 
     }
 
-    //Adds vote for kittenOne, attempts to sync it to Firebase, highlights photo, shows votes, and shows moreKittens button.
+    //Adds vote for kittenOne, attempts to sync it to Firebase, highlights photo,
+    //shows votes, and shows moreKittens button.
     voteKittenOne = function() {
       kittenOne.score ++;
       kittensRef.child(kittenOne.id).update(kittenOne, function(error) {
@@ -84,7 +84,8 @@ $((function () {
 
     }
 
-    //Adds vote for kittenTwo, attempts to sync it to Firebase, highlights photo, shows votes, and shows moreKittens button.
+    //Adds vote for kittenTwo, attempts to sync it to Firebase, highlights photo,
+    //shows votes, and shows moreKittens button.
     voteKittenTwo = function() {
       kittenTwo.score ++;
       kittensRef.child(kittenTwo.id).update(kittenTwo, function(error) {
@@ -111,7 +112,7 @@ $((function () {
     $kittenOneButton.on('click', voteKittenOne);
     $kittenTwoButton.on('click', voteKittenTwo);
 
-  }
+  };
 
   imgurSettings = {
     "async": true,
@@ -121,12 +122,12 @@ $((function () {
     "headers": {
       "authorization": "Client-ID 94a39a9de3f3274"
     }
-  }
+  };
 
   firebaseRef = new Firebase("http://boiling-torch-5679.firebaseIO.com");
   kittensRef = firebaseRef.child("kittenTracker");
 
-  //Function called once at startup, which creates a Tracker() object and populates it with Firebase kittens
+  //Asyncronous function called at startup, which creates a Tracker() object and populates it with Firebase kittens
   kittensRef.once('value', function(kittensSnapshot) {
     //Creates new tracker object kittensSnapshot for use in below examples.
     tracker = new Tracker();
@@ -144,44 +145,38 @@ $((function () {
   //Listens for changes in Kitten() objects on the Firebase server, updates local scores to match.
   kittensRef.on("child_changed", function(kittenSnapshot) {
     //console.log(tracker["kittens"][kittenSnapshot.key()]["score"]);
-
     tracker["kittens"][kittenSnapshot.key()]["score"] = kittenSnapshot.val()["score"];
-
     //console.log(tracker["kittens"][kittenSnapshot.key()]["score"]);
   });
 
-  //Puts a request to the Imgur API, gets info about kitten photos, generates Kitten() objects locally,
-  //and pushes them to Firebase.
-  $("#firebase_reset").on("click", function() {
 
-    tracker = new Tracker();
+  $(function () {
+    //Attach event listener to reset button. Callback function puts a request to the Imgur API, gets
+    //info about kitten photos, generates Kitten() objects locally, and pushes them to Firebase.
+    $("#firebase_reset").on("click", function() {
 
-    $.ajax(imgurSettings)
-      .done(function (response) {
+      tracker = new Tracker();
 
-        var imageJSON = response;
+      $.ajax(imgurSettings)
+        .done(function (response) {
+          var imgurObject = response;
 
-        if (imageJSON["data"].length > 1) {
+          if (imgurObject["data"].length > 1) {
+            for (var i = 0; i < imgurObject["data"].length; i++) {
+              tracker["kittens"][imgurObject["data"][i]["id"]] = new Kitten(imgurObject["data"][i]["id"], imgurObject["data"][i]["link"]);
+              kittensRef.child(imgurObject["data"][i]["id"]).set(tracker["kittens"][imgurObject["data"][i]["id"]]);
+            }
 
-          for (var i = 0; i < imageJSON["data"].length; i++) {
-
-            tracker["kittens"][imageJSON["data"][i]["id"]] = new Kitten(imageJSON["data"][i]["id"], imageJSON["data"][i]["link"]);
-            kittensRef.child(imageJSON["data"][i]["id"]).set(tracker["kittens"][imageJSON["data"][i]["id"]]);
+            tracker.setKittens();
           }
-
-          tracker.setKittens();
-        }
-
-      }).fail(function (error) {
-
-        console.log(error);
-
-      });
-
-
+        }).fail(function (error) {
+          console.log(error);
+        });
+    });
   });
 
+})();
 
-})());
+
 
 
