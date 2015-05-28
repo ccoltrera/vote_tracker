@@ -1,5 +1,5 @@
 $((function () {
-  var tracker, imgurSettings;
+  var tracker, imgurSettings, firebaseRef, kittensRef;
 
   //Kitten() object constructor
   function Kitten(id, link) {
@@ -123,8 +123,8 @@ $((function () {
     }
   }
 
-  var myFirebaseRef = new Firebase("http://boiling-torch-5679.firebaseIO.com");
-  var kittensRef = myFirebaseRef.child("kittenTracker");
+  firebaseRef = new Firebase("http://boiling-torch-5679.firebaseIO.com");
+  kittensRef = firebaseRef.child("kittenTracker");
 
   //Function called once at startup, which creates a Tracker() object and populates it with Firebase kittens
   kittensRef.once('value', function(kittensSnapshot) {
@@ -158,20 +158,28 @@ $((function () {
 
     $.ajax(imgurSettings)
       .done(function (response) {
+
         var imageJSON = response;
-        if (imageJSON["data"].length > 0) {
+
+        if (imageJSON["data"].length > 1) {
+
           for (var i = 0; i < imageJSON["data"].length; i++) {
+
             tracker["kittens"][imageJSON["data"][i]["id"]] = new Kitten(imageJSON["data"][i]["id"], imageJSON["data"][i]["link"]);
             kittensRef.child(imageJSON["data"][i]["id"]).set(tracker["kittens"][imageJSON["data"][i]["id"]]);
           }
+
           tracker.setKittens();
         }
+
       }).fail(function (error) {
+
         console.log(error);
+
       });
 
 
-  })
+  });
 
 
 })());
