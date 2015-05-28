@@ -1,0 +1,189 @@
+@font-face {
+  font-family: RockSalt;
+  src:url("Rock_Salt/RockSalt.ttf");
+}
+
+body {
+  background: #7D8A2E;
+  padding: 3rem 0 0 0;
+}
+
+header {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  background: #C9D787;
+  border: 0.1rem solid #C9D787;
+}
+
+main {
+  background: #FFFFFF;
+  border: 0.1rem solid #FFFFFF;
+}
+
+footer {
+  background: #C9D787;
+  border: 0.1rem solid #C9D787;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+h1, h2 {
+  font-family: RockSalt;
+  text-align: center;
+}
+
+h1 {
+  font-size: 4rem;
+  color: #FFFFFF;
+  margin: 1.5rem;
+}
+
+article {
+  padding: 3rem 0 0 0;
+}
+
+h2 {
+  font-size: 2.5rem;
+  color: #7D8A2E;
+}
+
+div {
+  text-align: center;
+}
+
+figure {
+  background: #C9D787;
+  margin: 1rem 1rem 3rem 0;
+  padding: 1rem;
+  border-radius: 3rem;
+  box-shadow: 0 0.5rem 0 #7D8A2E;
+  transition: all .1s linear;
+}
+
+figure.chosen_kitty {
+  background: #FF8598;
+  box-shadow: 0 0.5rem 0 #FFC0A9;
+  transform: translateY(0rem);
+}
+
+figure:hover {
+  cursor: pointer;
+  box-shadow: 0 0.4rem 0 #7D8A2E;
+  transform: translateY(0.1rem);
+}
+
+figure:active {
+  box-shadow: 0 0.2rem 0 #7D8A2E;
+  transform: translateY(0.3rem);
+}
+
+figure.chosen_kitty:hover {
+  background: #FF8598;
+  box-shadow: 0 0.4rem 0 #FFC0A9;
+  transform: translateY(0.1rem);
+  cursor: default;
+}
+
+figure.chosen_kitty:active {
+  box-shadow: 0 0.2rem 0 #FFC0A9;
+  transform: translateY(0.3rem);
+}
+
+figure.unchosen_kitty:hover {
+  background: #C9D787;
+  box-shadow: 0 0.4rem 0 #7D8A2E;
+  transform: translateY(0.1rem);
+  cursor: default;
+}
+
+figure.unchosen_kitty:active {
+  box-shadow: 0 0.2rem 0 #7D8A2E;
+  transform: translateY(0.3rem);
+}
+
+
+figure>img {
+  border-radius: 3rem;
+  border: 0.1rem solid #7D8A2E;
+}
+
+figure.chosen_kitty>img {
+  border-radius: 3rem;
+  border: 0.1rem solid #FFC0A9;
+}
+
+button {
+  background: #FF8598;
+  font-family: RockSalt;
+  border-width: 0;
+  border-radius: 1rem;
+  color: #FFFFFF;
+  box-shadow: 0 0.4rem 0 #FFC0A9;
+  transition: all .1s linear;
+}
+
+button:hover {
+  color: #FFFFFF;
+  box-shadow: 0 0.3rem 0 #FFC0A9;
+  transform: translateY(0.1rem);
+}
+
+button:active {
+  color: #FFFFFF;
+  box-shadow: 0 0.1rem 0 #FFC0A9;
+  transform: translateY(0.3rem);
+}
+
+button:focus {
+  color: #FFFFFF;
+}
+
+
+@media (min-width: 900px) {
+  .user_opinion {
+    width: 82.6666666667%;
+    margin-left: 8.66666666667%;
+    float: left;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 899px) {
+  .user_opinion {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+.user_opinion {
+  background: #C9D787;
+  display: block;
+  min-height: 38px;
+  padding: 0.75rem 0.75rem 0 0.75rem;
+  margin-top: 0.1rem;
+  margin-bottom: 0.85rem;
+  border-radius: 1rem;
+  font-family: RockSalt;
+  color: #7D8A2E;
+}
+
+aside {
+  text-align: center;
+}
+
+footer {
+  text-align: right;
+}
+
+#more_kittens {
+  margin: 1rem 0 3rem 0;
+}
+
+a {
+  cursor: pointer;
+  color: #7D8A2E;
+}
+
+a:hover {
+  color: #FFFFFF;
+}
