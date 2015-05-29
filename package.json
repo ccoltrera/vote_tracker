@@ -1,6 +1,6 @@
 {
   "name": "vote_tracker",
-  "version": "0.0.1",
+  "version": "0.12.4",
   "description": "Cutest Kitten Pageant vote tracker",
   "main": "script.js",
   "scripts": {
