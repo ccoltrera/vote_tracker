@@ -23,6 +23,9 @@
     "url": "https://github.com/ccoltrera/vote_tracker/issues"
   },
   "homepage": "https://github.com/ccoltrera/vote_tracker#readme",
+  "engines": {
+    "node": "0.10.x"
+  },
   "dependencies": {
     "express": "^4.12.4"
   }
